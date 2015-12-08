@@ -15,7 +15,7 @@ npm install react-native-sms-android --save
 ## Usage Example
 
 ```js
-var SmsAndroid = require('react-native-sms-android')
+var SmsAndroid = require('react-native-sms-android');
 
 SmsAndroid.sms(
   '123456789', // phone number to send sms to
@@ -29,7 +29,6 @@ SmsAndroid.sms(
   }
 );
 
-})
 ```
 
 ## Getting Started - Android
