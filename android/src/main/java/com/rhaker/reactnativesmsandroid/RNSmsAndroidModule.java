@@ -16,6 +16,7 @@ import android.util.Log;
 import java.util.Map;
 import java.util.HashMap;
 import java.lang.SecurityException;
+import java.lang.String;
 
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.NativeModule;
@@ -45,31 +46,50 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sms(String phoneNumberString, String body, Callback callback) {
+    public void sms(String phoneNumberString, String body, String sendType, Callback callback) {
 
-      Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumberString.trim()));
-      sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      // send directly if user requests and android greater than 4.4
+      if ((sendType.equals("sendDirect")) && (body != null) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)) {
 
-      String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mActivity);
+        try {
+           SmsManager smsManager = SmsManager.getDefault();
+           smsManager.sendTextMessage(phoneNumberString,null,body,null,null);
+           callback.invoke(null,"success");
+        }
 
-      if (body != null) {
-         sendIntent.putExtra("sms_body", body);
-      }
+        catch (Exception e) {
+           callback.invoke(null,"error");
+           e.printStackTrace();
+        }
 
-      if (defaultSmsPackageName != null) {
-          sendIntent.setPackage(defaultSmsPackageName);
-      }
+      } else {
 
-      try {
-         this.reactContext.startActivity(sendIntent);
-         callback.invoke(null,"success");
-      }
+        // launch default sms package, user hits send
+        Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumberString.trim()));
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-      catch (Exception e) {
-         callback.invoke(null,"error");
-         e.printStackTrace();
-      }
+        String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mActivity);
+
+        if (body != null) {
+           sendIntent.putExtra("sms_body", body);
+        }
+
+        if (defaultSmsPackageName != null) {
+            sendIntent.setPackage(defaultSmsPackageName);
+        }
+
+        try {
+           this.reactContext.startActivity(sendIntent);
+           callback.invoke(null,"success");
+        }
+
+        catch (Exception e) {
+           callback.invoke(null,"error");
+           e.printStackTrace();
+        }
 
     }
+
+  }
 
 }

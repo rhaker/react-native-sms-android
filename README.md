@@ -1,6 +1,6 @@
 ## react-native-sms-android
 
-This is a react native module that sends a sms message to a phone number. If the user has a default sms app, the message will open up directly. If there is no default, a sms chooser will be shown. This is for android only.
+This is a react native module that sends a sms message to a phone number. There are two options for sending a sms: 1) directly inside the app or 2) outside the app by launching the default sms application. This is for android only.
 
 For ios, you can use the LinkingIOS component which is part of the core.
 
@@ -20,6 +20,7 @@ var SmsAndroid = require('react-native-sms-android');
 SmsAndroid.sms(
   '123456789', // phone number to send sms to
   'This is the sms text', // sms body
+  'sendDirect', // sendDirect or sendIndirect
   (err, message) => {
     if (err){
       console.log("error");
@@ -90,7 +91,9 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 
 You should parse the phone number for digits only for best results. And the text message should be kept as short as possible to prevent truncation.
 
-The module does not directly send the text message. It just pre-populates the message to the recipient. The user still needs to hit the send button for the sms to be sent.
+The sendDirect option sends the text message silently from within your app. This requires android version 4.4 or higher. You must also specify a body message. If you provide invalid data, the module will default to the sendIndirect method.
+
+The sendIndirect option launches either the default sms application or the chooser. From here, the data is pre-populated in the sms message to the recipient. The user still needs to hit the send button for the sms to be sent. This occurs outside of your app.
 
 ## Acknowledgements and Special Notes
 
