@@ -11,17 +11,11 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 
 public class RNSmsAndroidPackage implements ReactPackage {
-
-    private Activity mActivity = null;
     private RNSmsAndroidModule mModuleInstance;
-
-    public RNSmsAndroidPackage(Activity activity) {
-          mActivity = activity;
-    }
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-      mModuleInstance = new RNSmsAndroidModule(reactContext,mActivity);
+      mModuleInstance = new RNSmsAndroidModule(reactContext);
       return Arrays.<NativeModule>asList(mModuleInstance);
     }
 
