@@ -29,15 +29,12 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = RNSmsAndroidModule.class.getSimpleName();
 
-    private Activity mActivity = null;
-
     private ReactApplicationContext reactContext;
 
     // set the activity - pulled in from Main
-    public RNSmsAndroidModule(ReactApplicationContext reactContext, Activity activity) {
+    public RNSmsAndroidModule(ReactApplicationContext reactContext) {
       super(reactContext);
       this.reactContext = reactContext;
-      mActivity = activity;
     }
 
     @Override
@@ -68,14 +65,15 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumberString.trim()));
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(mActivity);
-
         if (body != null) {
            sendIntent.putExtra("sms_body", body);
         }
 
-        if (defaultSmsPackageName != null) {
-            sendIntent.setPackage(defaultSmsPackageName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getCurrentActivity());
+            if (defaultSmsPackageName != null) {
+                sendIntent.setPackage(defaultSmsPackageName);
+            }
         }
 
         try {
