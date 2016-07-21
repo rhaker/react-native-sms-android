@@ -98,3 +98,4 @@ The sendIndirect option launches either the default sms application or the choos
 ## Acknowledgements and Special Notes
 
 This module owes a special thanks to @lucasferreira for his react-native-send-intent module.  
+This module was updated for RN v0.29+ by @sharafat
