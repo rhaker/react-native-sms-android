@@ -65,14 +65,15 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + phoneNumberString.trim()));
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getCurrentActivity());
-
         if (body != null) {
            sendIntent.putExtra("sms_body", body);
         }
 
-        if (defaultSmsPackageName != null) {
-            sendIntent.setPackage(defaultSmsPackageName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(getCurrentActivity());
+            if (defaultSmsPackageName != null) {
+                sendIntent.setPackage(defaultSmsPackageName);
+            }
         }
 
         try {
