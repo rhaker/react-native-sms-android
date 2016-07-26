@@ -49,7 +49,7 @@ dependencies {
 }
 ```
 
-* register module (in android/app/src/main/java/[your-app-namespace]/MainActivity.java)
+* If using RN < 0.29, register module (in android/app/src/main/java/[your-app-namespace]/MainActivity.java)
 ```java
 import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage; // <------ add import
 
@@ -81,7 +81,32 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
 }
 ```
 
-* add Sms permission (in android/app/src/main/AndroidManifest.xml)
+If using RN 0.29+, register module (in android/app/src/main/java/[your-app-namespace]/MainApplication.java)
+``` java
+// ...
+import com.rhaker.reactnativesmsandroid.RNSmsAndroidPackage; // <--
+
+public class MainApplication extends Application implements ReactApplication {
+
+    private final ReactNativeHost reactNativeHost = new ReactNativeHost(this) {
+
+            // ...
+
+            @Override
+            protected List<ReactPackage> getPackages() {
+                return Arrays.<ReactPackage>asList(
+                    new RNSmsAndroidPackage(),  // <--
+                    // ...
+                );
+            }
+        };
+    }
+
+    // ...
+}
+```
+
+* add Sms permission if you're sending SMS using the ```sendDirect``` method (in android/app/src/main/AndroidManifest.xml)
 ```xml
 ...
   <uses-permission android:name="android.permission.SEND_SMS" />
