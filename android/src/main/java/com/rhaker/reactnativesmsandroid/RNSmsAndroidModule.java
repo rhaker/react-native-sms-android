@@ -126,7 +126,6 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
                 {
                     if (c >= indexFrom) {
                         if (maxCount>0 && c >= indexFrom + maxCount) break;
-                        c++;
                         // Long dateTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("date")));
                         // String message = cursor.getString(cursor.getColumnIndex("body"));
                         JSONObject json;
@@ -135,6 +134,7 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
 
                     }
                 }
+                c++;
 
             }
             cursor.close();
