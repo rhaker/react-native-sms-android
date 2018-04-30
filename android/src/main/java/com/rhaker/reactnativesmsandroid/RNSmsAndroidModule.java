@@ -133,8 +133,8 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
                         jsons.put(json);
 
                     }
+                    c++;
                 }
-                c++;
 
             }
             cursor.close();
